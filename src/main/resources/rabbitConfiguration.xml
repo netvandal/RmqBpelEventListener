@@ -9,6 +9,6 @@
         <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/>
 	
 	<rabbit:admin connection-factory="connectionFactory"/>
-	<rabbit:queue name="myqueue"/>
+	<rabbit:queue name="log"/>
 
 </beans>
