@@ -46,7 +46,7 @@ public class RmqBpelEventListener implements BpelEventListener {
 
     public void onEvent(BpelEvent bpelEvent) {
         String om = serializeEvent(bpelEvent);
-        template.convertAndSend("log", om);
+        template.convertAndSend("service.event", om);
             
     }
 
