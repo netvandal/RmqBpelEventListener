@@ -3,26 +3,19 @@ package it.itsociety.logger;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.apache.ode.bpel.pmapi.impl.TEventInfoImpl;
-import org.apache.xmlbeans.SchemaType;
+import org.apache.ode.bpel.pmapi.TEventInfo;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-public class JSonEventInfo extends TEventInfoImpl {
+public class JSonEventSerializer {
 
-	private static final long serialVersionUID = -4806486512878719514L;
-
-	public JSonEventInfo(SchemaType arg0) {
-		super(arg0);
-	}
-
-	public String toJson() {
+	public static String toJson(TEventInfo ei) {
 		String result =null;
         ObjectMapper mapper = new ObjectMapper();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-			mapper.writeValue(out, this);
+			mapper.writeValue(out, ei);
 	        result= new String(out.toByteArray(), "UTF-8");
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
