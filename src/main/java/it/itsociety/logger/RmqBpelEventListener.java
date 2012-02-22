@@ -6,7 +6,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +13,6 @@ import java.util.Date;
 import org.apache.ode.bpel.evt.BpelEvent;
 import org.apache.ode.bpel.iapi.BpelEventListener;
 import org.apache.ode.bpel.evt.ActivityEvent;
-import org.apache.ode.bpel.evt.BpelEvent;
 import org.apache.ode.bpel.evt.CorrelationEvent;
 import org.apache.ode.bpel.evt.CorrelationMatchEvent;
 import org.apache.ode.bpel.evt.CorrelationSetEvent;
@@ -33,7 +31,6 @@ import org.apache.ode.bpel.evt.ScopeCompletionEvent;
 import org.apache.ode.bpel.evt.ScopeEvent;
 import org.apache.ode.bpel.evt.ScopeFaultEvent;
 import org.apache.ode.bpel.evt.VariableEvent;
-import org.apache.ode.bpel.iapi.BpelEventListener;
 import org.apache.ode.bpel.pmapi.TEventInfo;
 
 
@@ -47,21 +44,18 @@ public class RmqBpelEventListener implements BpelEventListener {
     protected Calendar _calendar = Calendar.getInstance(); 
 
 
-    @Override
-        public void onEvent(BpelEvent bpelEvent) {
+    public void onEvent(BpelEvent bpelEvent) {
         String om = serializeEvent(bpelEvent);
         template.convertAndSend("log", om);
             
     }
 
-    @Override
-	public void shutdown() {
+    public void shutdown() {
         // TODO Auto-generated method stub
 		
     }
 
-    @Override
-	public void startup(Properties arg0) {
+    public void startup(Properties arg0) {
         context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
         
         amqpAdmin = context.getBean(AmqpAdmin.class);
