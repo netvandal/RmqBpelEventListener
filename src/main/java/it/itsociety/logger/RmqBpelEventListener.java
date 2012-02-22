@@ -67,8 +67,7 @@ public class RmqBpelEventListener implements BpelEventListener {
     protected String serializeEvent(BpelEvent evt) {
         TEventInfo ei = TEventInfo.Factory.newInstance();
         fillEventInfo(ei, evt);
-        String xml = ei.toString();
-        return xml;
+        return JSonEventSerializer.toJson(ei);
     }
 
     private void fillEventInfo(TEventInfo info, BpelEvent event) {
