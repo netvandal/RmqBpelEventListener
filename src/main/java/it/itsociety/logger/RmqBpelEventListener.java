@@ -32,6 +32,8 @@ import org.apache.ode.bpel.evt.ScopeEvent;
 import org.apache.ode.bpel.evt.ScopeFaultEvent;
 import org.apache.ode.bpel.evt.VariableEvent;
 import org.apache.ode.bpel.pmapi.TEventInfo;
+import org.apache.ode.bpel.evt.ActivityExecEndEvent;
+import it.itsociety.logger.JSonEventSerializer;
 
 
 public class RmqBpelEventListener implements BpelEventListener {
@@ -45,11 +47,13 @@ public class RmqBpelEventListener implements BpelEventListener {
 
 
     public void onEvent(BpelEvent bpelEvent) {
-        String om = serializeEvent(bpelEvent);
-        template.convertAndSend("service.event", om);
-            
-    }
 
+        if(bpelEvent instanceof ActivityExecEndEvent) {
+            String om = serializeEvent((ActivityExecEndEvent)bpelEvent);
+            template.convertAndSend("itsociety.logger", "itsociety.main.queue", om);
+        }
+    }
+    
     public void shutdown() {
         // TODO Auto-generated method stub
 		
@@ -59,17 +63,18 @@ public class RmqBpelEventListener implements BpelEventListener {
         context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
         
         amqpAdmin = context.getBean(AmqpAdmin.class);
-        mainQueue = new Queue("itsocety.main.queue");
-        amqpAdmin.declareQueue(mainQueue);
+        //mainQueue = new Queue("itsociety.main.queue");
+        //amqpAdmin.declareQueue(mainQueue);
         template = context.getBean(AmqpTemplate.class);
     }
 
-    protected String serializeEvent(BpelEvent evt) {
+    protected String serializeEvent(ActivityExecEndEvent evt) {
         TEventInfo ei = TEventInfo.Factory.newInstance();
-        fillEventInfo(ei, evt);
-        return JSonEventSerializer.toJson(ei);
+        //fillEventInfo(ei, evt);
+        return JSonEventSerializer.toJson(evt);
     }
 
+    // Actually unused JSonEventSerializer can't serialize TEventeInfo
     private void fillEventInfo(TEventInfo info, BpelEvent event) {
         info.setName(BpelEvent.eventName(event));
         info.setType(event.getType().toString());

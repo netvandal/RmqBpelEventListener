@@ -7,26 +7,29 @@ import org.apache.ode.bpel.pmapi.TEventInfo;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import it.itsociety.logger.ItsEvent;
+import org.apache.ode.bpel.evt.BpelEvent;
+import org.apache.ode.bpel.evt.ActivityExecEndEvent;
 
 public class JSonEventSerializer {
 
-	public static String toJson(TEventInfo ei) {
-		String result =null;
+    public static String toJson(ActivityExecEndEvent ei) {
+        String result =null;
         ObjectMapper mapper = new ObjectMapper();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-			mapper.writeValue(out, ei);
-	        result= new String(out.toByteArray(), "UTF-8");
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            mapper.writeValue(out, ei);
+            result= new String(out.toByteArray(), "UTF-8");
+        } catch (JsonGenerationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return result;
 
 
