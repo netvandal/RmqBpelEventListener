@@ -15,10 +15,10 @@
 <rabbit:queue name="itsociety.main.queue"/>
 
 
-<rabbit:fanout-exchange name="itsociety.logger" xmlns="http://www.springframework.org/schema/rabbit">
-  <rabbit:bindings>
-    <rabbit:binding queue="itsociety.main.queue" />
-  </rabbit:bindings>
-</rabbit:fanout-exchange>
+<fanout-exchange name="itsociety.logger" xmlns="http://www.springframework.org/schema/rabbit">
+  <bindings>
+    <binding queue="itsociety.main.queue" />
+  </bindings>
+</fanout-exchange>
 
 </beans>
