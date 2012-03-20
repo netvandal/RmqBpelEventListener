@@ -3,6 +3,7 @@ package it.itsociety.logger;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.Exchange;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -42,23 +43,27 @@ public class RmqBpelEventListener implements BpelEventListener {
     private static ApplicationContext context;
     private static AmqpAdmin amqpAdmin;
     private static Queue mainQueue;
-
+    private static Exchange exchange;
+   
+    
     private AmqpTemplate amqp=null;
     
-    protected Calendar _calendar = Calendar.getInstance(); 
+    protected Calendar _calendar = Calendar.getInstance();
 
-    public void setAmqp(AmqpTemplate amqp) {
-	this.amqp = amqp;
+    public RmqBpelEventListener() {
+
+	context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
+	amqp = (AmqpTemplate) context.getBean("amqpTemplate");
+	mainQueue = (Queue) context.getBean("input_queue");
+	exchange = (Exchange) context.getBean("itsociety_sink");
+	
     }
 
-    public AmqpTemplate getAmqp() {
-	return this.amqp;
-    }
-    
+
     public void onEvent(BpelEvent bpelEvent) {
 	if(bpelEvent instanceof ActivityExecEndEvent) {
             String om = serializeEvent((ActivityExecEndEvent)bpelEvent);
-            amqp.convertAndSend(om);
+            amqp.convertAndSend(exchange.getName(), mainQueue.getName(), om);
 	}
     }
     
@@ -68,7 +73,6 @@ public class RmqBpelEventListener implements BpelEventListener {
     }
 
     public void startup(Properties arg0) {
-        context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
         
         //amqpAdmin = context.getBean(AmqpAdmin.class);
 	//amqp = (AmqpTemplate)context.getBean("amqpTemplate");

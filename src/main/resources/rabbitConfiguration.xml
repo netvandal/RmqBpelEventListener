@@ -11,7 +11,11 @@
         http://schema.cloudfoundry.org/spring http://schema.cloudfoundry.org/spring/cloudfoundry-spring.xsd
         http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
     
-    
+  <bean id="projectPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location">
+      <value>classpath:rabbitmq.properties</value>
+    </property>
+  </bean>    
     <!-- SERVICE BUS -->
     <cloud:rabbit-connection-factory id="connectionFactory"/>
     <rabbit:admin id="amqpAdmin" connection-factory="connectionFactory"/>
@@ -33,7 +37,4 @@
 
     <rabbit:topic-exchange name="itsociety_source" durable="false"/>   
 
-    <bean id="bpelListener" class="it.itsociety.logger.RmqBpelEventListener">
-        <property name="amqp" ref="amqpTemplate"></property>
-    </bean>
 </beans>
