@@ -34,7 +34,7 @@ import org.apache.ode.bpel.evt.VariableEvent;
 import org.apache.ode.bpel.pmapi.TEventInfo;
 import org.apache.ode.bpel.evt.ActivityExecEndEvent;
 import it.itsociety.logger.JSonEventSerializer;
-
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 public class RmqBpelEventListener implements BpelEventListener {
 
@@ -42,16 +42,24 @@ public class RmqBpelEventListener implements BpelEventListener {
     private static ApplicationContext context;
     private static AmqpAdmin amqpAdmin;
     private static Queue mainQueue;
-    private static AmqpTemplate template;
+
+    private AmqpTemplate amqp=null;
+    
     protected Calendar _calendar = Calendar.getInstance(); 
 
+    public void setAmqp(AmqpTemplate amqp) {
+	this.amqp = amqp;
+    }
 
+    public AmqpTemplate getAmqp() {
+	return this.amqp;
+    }
+    
     public void onEvent(BpelEvent bpelEvent) {
-
-        if(bpelEvent instanceof ActivityExecEndEvent) {
+	if(bpelEvent instanceof ActivityExecEndEvent) {
             String om = serializeEvent((ActivityExecEndEvent)bpelEvent);
-            template.convertAndSend("itsociety.logger", "itsociety.main.queue", om);
-        }
+            amqp.convertAndSend(om);
+	}
     }
     
     public void shutdown() {
@@ -62,10 +70,9 @@ public class RmqBpelEventListener implements BpelEventListener {
     public void startup(Properties arg0) {
         context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
         
-        amqpAdmin = context.getBean(AmqpAdmin.class);
-        //mainQueue = new Queue("itsociety.main.queue");
-        //amqpAdmin.declareQueue(mainQueue);
-        template = context.getBean(AmqpTemplate.class);
+        //amqpAdmin = context.getBean(AmqpAdmin.class);
+	//amqp = (AmqpTemplate)context.getBean("amqpTemplate");
+	
     }
 
     protected String serializeEvent(ActivityExecEndEvent evt) {
