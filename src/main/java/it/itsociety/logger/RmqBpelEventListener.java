@@ -42,29 +42,25 @@ public class RmqBpelEventListener implements BpelEventListener {
     
     private static ApplicationContext context;
     private static AmqpAdmin amqpAdmin;
-    private static Queue mainQueue;
-    private static Exchange exchange;
-   
+    private String routing_key=null;
     
     private AmqpTemplate amqp=null;
     
     protected Calendar _calendar = Calendar.getInstance();
 
     public RmqBpelEventListener() {
-
-	context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
-	amqp = (AmqpTemplate) context.getBean("amqpTemplate");
-	mainQueue = (Queue) context.getBean("input_queue");
-	exchange = (Exchange) context.getBean("itsociety_sink");
-	
+        context = new ClassPathXmlApplicationContext("rabbitConfiguration.xml");
+        amqp = (AmqpTemplate) context.getBean("amqpTemplate");
+        //FIXME generate user-dependant routing keys?
+        routing_key="service.event";
     }
 
 
     public void onEvent(BpelEvent bpelEvent) {
-	if(bpelEvent instanceof ActivityExecEndEvent) {
+        if(bpelEvent instanceof ActivityExecEndEvent) {
             String om = serializeEvent((ActivityExecEndEvent)bpelEvent);
-            amqp.convertAndSend(exchange.getName(), mainQueue.getName(), om);
-	}
+            amqp.convertAndSend(routing_key,om);
+        }
     }
     
     public void shutdown() {
