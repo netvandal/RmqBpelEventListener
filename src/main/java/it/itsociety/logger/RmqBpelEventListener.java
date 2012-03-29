@@ -64,15 +64,10 @@ public class RmqBpelEventListener implements BpelEventListener {
     }
     
     public void shutdown() {
-        // TODO Auto-generated method stub
 		
     }
 
     public void startup(Properties arg0) {
-        
-        //amqpAdmin = context.getBean(AmqpAdmin.class);
-	//amqp = (AmqpTemplate)context.getBean("amqpTemplate");
-	
     }
 
     protected String serializeEvent(ActivityExecEndEvent evt) {
