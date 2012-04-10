@@ -7,7 +7,6 @@ import org.apache.ode.bpel.pmapi.TEventInfo;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import it.itsociety.logger.ItsEvent;
 import org.apache.ode.bpel.evt.BpelEvent;
 import org.apache.ode.bpel.evt.ActivityExecEndEvent;
 

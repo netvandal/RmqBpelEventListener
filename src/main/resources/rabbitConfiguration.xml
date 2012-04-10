@@ -13,9 +13,14 @@
     
   <bean id="projectPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="location">
-      <value>classpath:rabbitmq.properties</value>
+      <value>classpath:itsociety_backbone.properties</value>
     </property>
   </bean>    
+   <bean id="loggerConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location">
+      <value>classpath:rabbit-logger.properties</value>
+    </property>
+  </bean> 
     <!-- SERVICE BUS -->
     <cloud:rabbit-connection-factory id="connectionFactory"/>
     <rabbit:admin id="amqpAdmin" connection-factory="connectionFactory"/>
@@ -23,18 +28,18 @@
     <!-- Set up the AmqpTemplate/RabbitTemplate: -->
     <rabbit:template id="amqpTemplate"
     	connection-factory="connectionFactory"
-     />
+    	exchange="${backbone.sink_exchange}" />
 
     <!-- Global input queue, bound to the exchange -->
-    <rabbit:queue id="input_queue" name="input_queue" durable="false" />
+    <rabbit:queue id="input_queue" name="${backbone.main_queue}" durable="false" />
 
     <!-- Master -> Slave exchange -->
-    <rabbit:fanout-exchange name="itsociety_sink" durable="false">   
+    <rabbit:fanout-exchange name="${backbone.sink_exchange}" durable="false">   
         <rabbit:bindings>
             <rabbit:binding queue="input_queue" />
         </rabbit:bindings>
     </rabbit:fanout-exchange>
 
-    <rabbit:topic-exchange name="itsociety_source" durable="false"/>   
+    <rabbit:topic-exchange name="${backbone.source_exchange}" durable="false"/>   
 
 </beans>
