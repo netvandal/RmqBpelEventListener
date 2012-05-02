@@ -113,6 +113,12 @@
             <scope>test</scope>
         </dependency>
 
+	<dependency>
+            <groupId>it.itsociety.webserver.sdk</groupId>
+            <artifactId>itsociety-sdk</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

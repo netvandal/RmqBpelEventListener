@@ -12,7 +12,7 @@ import org.apache.ode.bpel.evt.ActivityExecEndEvent;
 
 public class JSonEventSerializer {
 
-    public static String toJson(ActivityExecEndEvent ei) {
+    public static String toJson(ItsEvent ei) {
         String result =null;
         ObjectMapper mapper = new ObjectMapper();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -30,6 +30,25 @@ public class JSonEventSerializer {
             e.printStackTrace();
         }
         return result;
+
+
+	// String result =null;
+        // ObjectMapper mapper = new ObjectMapper();
+        // ByteArrayOutputStream out = new ByteArrayOutputStream();
+        // try {
+        //     mapper.writeValue(out, ei);
+        //     result= new String(out.toByteArray(), "UTF-8");
+        // } catch (JsonGenerationException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // } catch (JsonMappingException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+        // return result;
 
 
         /*    String name=getName();
